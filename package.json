@@ -1,0 +1,12 @@
+{
+  "name": "@mtti/microservice-sequelize",
+  "version": "0.1.0",
+  "description": "Sequelize plugin for @mtti/microservice",
+  "author": "Matti Hiltunen",
+  "license": "Apache-2.0",
+  "repository": "github:mtti/node-microservice-sequelize",
+  "main": "index.js",
+  "dependencies": {
+    "sequelize": "4.32.2"
+  }
+}
