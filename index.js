@@ -16,7 +16,10 @@ limitations under the License.
 
 const Sequelize = require('sequelize');
 
-function plugin(schemas) {
+function plugin() {
+  const schemas = arguments[0];
+  const extraArguments = Array.prototype.slice.call(arguments).slice(1);
+
   return {
     configure: (config) => {
       if (config.dbServer) {
@@ -36,7 +39,10 @@ function plugin(schemas) {
       );
 
       if (schemas) {
-        const models = schemas.map(schema => schema(sequelize, Sequelize.DataTypes));
+        const models = schemas.map((schema) => {
+          const args = [sequelize, Sequelize.DataTypes].concat(extraArguments);
+          return schema.apply(null, args);
+        });
 
         service.models = {};
         models.forEach((model) => {
