@@ -1,7 +1,9 @@
 ![status alpha](https://img.shields.io/badge/development_status-alpha-red.svg)
 [![npm version](https://badge.fury.io/js/%40mtti%2Fmicroservice-sequelize.svg)](https://badge.fury.io/js/%40mtti%2Fmicroservice-sequelize)
 
-A plugin for [@mtti/microservice](https://github.com/mtti/node-microservice) which connects to a database with Sequelize when the microservice starts. The server to connect to is determined by a URL in the `DB_SERVER` environment variable.
+A plugin for [@mtti/microservice](https://github.com/mtti/node-microservice) which connects to a database with Sequelize when the microservice starts.
+
+If the [@mtti/microservice-nats](https://github.com/mtti/node-microservice-nats) plugin is also in use, models with `exportResource` set to `true` are exposed over NATS with [@mtti/nats-rest](https://github.com/mtti/node-nats-rest).
 
 ## Example
 
@@ -15,7 +17,7 @@ const models = require('./models');
 const service = new Microservice('myservice');
 
 /*
-// Uncomment to set database URL manually, instead of DB_SERVER env variable.
+// Set database URL manually instead of DB_SERVER env variable.
 service.configure({
     dbServer: 'postgres://user:pass@localhost:5432/myservice'
 });
