@@ -52,13 +52,12 @@ class SequelizeResource {
     }
 
     this._defaultBodySchema = this._model.defaultBodySchema;
-    this._jsonValidation = this._model.jsonValidation || 'permissive';
     this._jsonSchemas = this._model.jsonSchemas || {};
     this._actions = [];
 
     if (options.defaultActions !== false) {
-      if (this._jsonValidation === 'strict' && !this._defaultBodySchema) {
-        throw new Error('defaultBodySchema is required with defaultActions and strict validation');
+      if (!this._defaultBodySchema) {
+        throw new Error('defaultBodySchema is required with defaultActions');
       }
 
       const getAction = new InstanceAction('GET', this._get.bind(this));
@@ -89,7 +88,6 @@ class SequelizeResource {
   start() {
     const serverOptions = {
       instanceLoader: this._instanceLoader.bind(this),
-      jsonValidation: this._jsonValidation,
       jsonSchemas: this._jsonSchemas,
       actions: this._actions,
       logger: this._logger,
