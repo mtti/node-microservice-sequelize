@@ -16,6 +16,7 @@ limitations under the License.
 
 const _ = require('lodash');
 const createError = require('http-errors');
+const jsonpatch = require('fast-json-patch');
 const { ResourceServer, InstanceAction } = require('@mtti/nats-rest');
 
 class SequelizeResource {
@@ -65,6 +66,8 @@ class SequelizeResource {
         .setLoadInstance(false)
         .setBodySchema(this._defaultBodySchema);
       const patchAction = new InstanceAction('PATCH', this._patch.bind(this))
+        .setBodySchema(false);
+      const postAction = new InstanceAction('POST', this._post.bind(this))
         .setBodySchema(this._defaultBodySchema);
       const deleteAction = new InstanceAction('DELETE', this._delete.bind(this))
         .setLoadInstance(false);
@@ -73,6 +76,7 @@ class SequelizeResource {
         getAction,
         putAction,
         patchAction,
+        postAction,
         deleteAction,
       ]);
     }
@@ -130,8 +134,15 @@ class SequelizeResource {
     return instance.save();
   }
 
-  _patch(instance, body) {
+  _post(instance, body) {
     return instance.update(body);
+  }
+
+  _patch(instance, patch) {
+    const instanceJSON = instance.toJSON();
+    const newBody = jsonpatch.applyPatch(instanceJSON, patch).newDocument;
+    delete newBody.id;
+    return instance.update(newBody);
   }
 
   _delete(id) {
