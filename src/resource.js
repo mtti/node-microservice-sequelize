@@ -97,8 +97,19 @@ class SequelizeResource {
   _upsert(id, body) {
     const bodyCopy = _.cloneDeep(body);
     bodyCopy.id = id;
-    return this._model.upsert(bodyCopy)
-      .then(() => this._model.findById(id));
+
+    return this._model.findById(id)
+      .then((instance) => {
+        const options = {
+          isNewRecord: true,
+        };
+        if (instance) {
+          options.isNewRecord = false;
+        }
+
+        const newInstance = this._model.build(bodyCopy, options);
+        return newInstance.save();
+      });
   }
 
   _delete(id) {
