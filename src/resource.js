@@ -47,7 +47,7 @@ class SequelizeResource {
     this._name = options.name || model.name;
     this._logger = options.logger;
 
-    this._jsonSchemas = this._model.jsonSchemas || {};
+    this._jsonSchemas = this._model.jsonSchemas || [];
     this._schemaRef = this._model.schemaRef;
     this._actions = [];
 
